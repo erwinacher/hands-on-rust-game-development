@@ -1,3 +1,5 @@
-rustup show active-toolchain
-rustup component list --installed
+## various commands
+rustup show active-toolchain 
+rustup component list --installed 
+
 
