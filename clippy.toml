@@ -1,1 +1,6 @@
-warn = ["clippy::all", "clippy::pedantic"]
+# clippy.toml
+# Example: customize Clippy’s behavior
+
+# Allow or deny specific lints globally
+# (You CANNOT set levels like "warn" here; just true/false or thresholds)
+msrv = "1.92.0"   # optional, helps Clippy know your minimum Rust version
