@@ -1,0 +1,12 @@
+[package]
+name = "cli"
+edition.workspace = true
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+core = { path = "../core" }
+anyhow.workspace = true
+serde.workspace = true
+tokio.workspace = true

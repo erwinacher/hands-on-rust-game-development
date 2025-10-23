@@ -1,0 +1,5 @@
+[toolchain]
+channel = "nightly"              # or "stable", or a date like "nightly-2025-01-01"
+components = ["rustfmt", "clippy"]
+targets = ["x86_64-unknown-linux-gnu"]   # optional
+profile = "default"                      # optional
