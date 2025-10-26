@@ -31,7 +31,12 @@ fn what_is_your_name() -> String {
 }
 
 fn main() {
-    let visitor_list = ["bert", "steve", "fred"];
+    //let visitor_list = ["bert", "steve", "fred"];
+    let visitor_list = [
+        Visitor::new("bert", "Hello Bert, enjoy your treehouse."),
+        Visitor::new("steve", "Hi Steve, your milk is in the fridge."),
+        Visitor::new("fred", "Wow, who invited Fred?"),
+    ];
     
     println!("Hello, what's your name?");
     let name = what_is_your_name();
