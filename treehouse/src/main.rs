@@ -41,16 +41,22 @@ fn main() {
     println!("Hello, what's your name?");
     let name = what_is_your_name();
 
-    let mut allow_them_in = false;
-    for visitor in &visitor_list {
-        if visitor == &name {
-            allow_them_in = true;
-        }
+    //let mut allow_them_in = false;
+    //for visitor in &visitor_list {
+    //    if visitor == &name {
+    //        allow_them_in = true;
+    //    }
+    //}
+    let known_visitor = visitor_list
+        .iter()
+        .find(|visitor| visitor.name == name);
+    match known_visitor {
+        Some(visitor) => visitor.greet_visitor(),
+        None => println!("You are not on the visitor list.")
     }
-
-    if allow_them_in {
-        println!("Welcome to the Treehouse, {}", name);
-    } else {
-        println!("Sorry, you aren't on the list/");
-    }
+    //if allow_them_in {
+    //    println!("Welcome to the Treehouse, {}", name);
+    //} else {
+    //    println!("Sorry, you aren't on the list/");
+    //}
 }
