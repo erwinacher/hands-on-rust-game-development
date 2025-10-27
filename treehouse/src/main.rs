@@ -15,6 +15,12 @@ impl VisitorName {
         }
     }
 }
+impl PartialEq for VisitorName {
+    fn eq(&self, other: &Self) -> bool {
+        self.normalized == other.normalized
+    }
+}
+
 
 #[derive(Debug)]
 struct Visitor {
@@ -70,7 +76,7 @@ fn main() {
         //}
         let known_visitor = visitor_list
             .iter()
-            .find(|visitor| visitor.visitor_name.normalized == visitor_name.normalized);
+            .find(|v| v.visitor_name == visitor_name);
         println!("{:#?}", known_visitor);
         
         match known_visitor {
