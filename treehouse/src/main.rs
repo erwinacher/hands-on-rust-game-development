@@ -1,6 +1,14 @@
 use std::io::stdin;
 
 
+#[derive(Debug)]
+enum VisitorAction {
+    Accept,
+    AcceptWithNote{ note: String },
+    Refuse,
+    Probation,
+}
+
 
 #[derive(Debug)]
 struct VisitorName {
@@ -25,19 +33,35 @@ impl PartialEq for VisitorName {
 #[derive(Debug)]
 struct Visitor {
     visitor_name: VisitorName,
-    greeting: String,
+    //greeting: String,
+    action: VisitorAction,
+    age: i8,
 }
 
 impl Visitor {
-    fn new(name: &str, greeting: &str) -> Self {
+    fn new(name: &str, action: VisitorAction, age: i8) -> Self {
         Self {
             visitor_name: VisitorName::new(name),
-            greeting: greeting.to_string(),
+            //greeting: greeting.to_string(),
+            action,
+            age,
         }
     }
 
     fn greet_visitor(&self) {
-        println!("{}", self.greeting);
+        //println!("{}", self.greeting);
+        match &self.action {
+            VisitorAction::Accept => println!("Welcome to the treehouse, {}", self.visitor_name.original),
+            VisitorAction::AcceptWithNote { note } => {
+                println!("Welcome to the treehouse, {}", self.visitor_name.original);
+                println!("{}", note);
+                if self.age < 21 {
+                    println!("Do not serve alchol to {}", self.visitor_name.original);
+                }          
+            }
+            VisitorAction::Probation => println!("{} is now a probationary member", self.visitor_name.original),
+            VisitorAction::Refuse => println!("Do not allow {} in!", self.visitor_name.original),
+        }
     }
 }
 
@@ -56,9 +80,9 @@ fn main() {
     // let visitor_list = Vec::new();
     // visitor_list.push(Vistir::new(...));
     let mut visitor_list = vec![
-        Visitor::new("Bert", "Hello Bert, enjoy your treehouse."),
-        Visitor::new("Steve", "Hi Steve, your milk is in the fridge."),
-        Visitor::new("Fred", "Wow, who invited Fred?"),
+        Visitor::new("Bert", VisitorAction::Accept, 45),
+        Visitor::new("Steve", VisitorAction::AcceptWithNote { note: String::from("Lactose-free milk is in the fridge") }, 15),
+        Visitor::new("Fred", VisitorAction::Refuse, 30),
     ];
     
     loop {
@@ -66,6 +90,7 @@ fn main() {
         let visitor_name = what_is_your_name();
 
         if visitor_name.original.is_empty() {
+            println!("{:#?}", visitor_list);
             break;
         }
         //let mut allow_them_in = false;
@@ -82,7 +107,7 @@ fn main() {
         match known_visitor {
             Some(visitor) => visitor.greet_visitor(),
             None => {
-                visitor_list.push(Visitor::new(&visitor_name.original, "New friend"));
+                visitor_list.push(Visitor::new(&visitor_name.original, VisitorAction::Probation, 0));
                 println!("{} is not on the visitor list.", visitor_name.original);
             }
         }
