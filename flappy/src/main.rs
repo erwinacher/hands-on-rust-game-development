@@ -2,10 +2,32 @@
 
 use bracket_lib::prelude::*;
 
+const SCREEN_WIDTH: i32 = 80;
+const SCREEN_HEIGHT: i32 = 50;
+const FRAME_DURATION: f32 = 75.0;
+
 enum GameMode {
     Menu,
     Playing,
     End,
+}
+
+struct Obstacle {
+    x: i32,
+    gap_y: i32,
+    gap_size: i32,
+}
+impl Obstacle {
+    // x where the obstacle is in the space, 
+    fn new(x: i32, score: i32) -> Self {
+        let mut random = RandomNumberGenerator::new();
+        Obstacle {
+            x,
+            gap_y: random.range(10, 40),
+            gap_size: i32::max(2, 20 - score),  // higher the score the more difficult the game
+    // becomes
+        }
+    }
 }
 
 struct Player {
@@ -62,8 +84,22 @@ impl State {
         }
     }
 
-    fn play(&mut self, _ctx: &mut BTerm) {
-        self.mode = GameMode::End;
+    fn play(&mut self, ctx: &mut BTerm) {
+        ctx.cls_bg(NAVY);
+        self.frame_time += ctx.frame_time_ms;
+        if self.frame_time > FRAME_DURATION {
+            self.frame_time = 0.0;
+            self.player.gravity_and_move();
+        }
+        if let Some(VirtualKeyCode::Space) = ctx.key {  // not restrcting this by frame times,
+            // otherwise the keyboard becomes unresponsive during wait times.
+            self.player.flap();
+        }
+        self.player.render(ctx);
+        ctx.print(0, 0, "Press SPACE to flap. (Keep flapping :))");
+        if self.player.y > SCREEN_HEIGHT {
+            self.mode = GameMode::End; // state has changed, tick will pick it up ending the game 
+        }
     }
 
     fn restart(&mut self) {
